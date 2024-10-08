@@ -57,11 +57,9 @@ export class Player {
             this.animationHappening = true;
             this.y -= this.ySpeed;
             this.playerXAnimation();
-            console.log(this.height + " y " + this.width);
             this.playerSize -= 0.001;
         } else if (!this.isMovingUp && this.y < 0.80) {
             this.y += this.ySpeed;
-            console.log(this.height + " y " + this.width);
             this.playerSize += 0.001;
             this.playerXReturnAnimation();
         }

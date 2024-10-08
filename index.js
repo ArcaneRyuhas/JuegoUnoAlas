@@ -2,6 +2,7 @@ import { Player } from './classes/player.js';
 import { drawObjects, updateObjectsPosition } from './classes/objects.js';
 import { drawBackground } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
+import { drawImages, selectImages } from './classes/obstacles.js';
 
 const player = new Player();
 let keyPressed={}
@@ -9,6 +10,7 @@ let keyPressed={}
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
+    drawImages();
     player.draw();
     player.updatePosition();
     drawObjects();
@@ -32,6 +34,7 @@ window.addEventListener('keydown', (e) => {
         }
         if(e.key === 'ArrowUp') {
             player.isMovingUp = true;
+            selectImages();
         }
     }
 });
@@ -43,4 +46,5 @@ window.addEventListener('keyup', (e) => {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(player);
+selectImages();
 gameLoop();
