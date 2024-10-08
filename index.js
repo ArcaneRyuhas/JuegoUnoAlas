@@ -2,7 +2,8 @@ import { Player } from './classes/player.js';
 import { drawObjects, updateObjectsPosition } from './classes/objects.js';
 import { drawBackground } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
-import { drawImages, selectImages } from './classes/obstacles.js';
+import { drawImagesAndName, selectImages, correctImagePosition } from './classes/obstacles.js';
+import { choseOption, drawLives } from './classes/gameplay.js';
 
 const player = new Player();
 let keyPressed={}
@@ -10,7 +11,8 @@ let keyPressed={}
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
-    drawImages();
+    drawImagesAndName();
+    drawLives();
     player.draw();
     player.updatePosition();
     drawObjects();
@@ -22,23 +24,20 @@ window.addEventListener('keydown', (e) => {
     if (!keyPressed[e.key]) {
         keyPressed[e.key] = true; 
         if (e.key === 'ArrowLeft' && player.x > 0.26 && !player.animationHappening) {
-            console.log('Tecla ArrowLeft presionada');
             player.x -= player.xSpeed;
             player.playerPosition --;
-            console.log("Posición en X: " + player.x);
         }
         if (e.key === 'ArrowRight' && player.x < 0.64 && !player.animationHappening) {
             player.x += player.xSpeed;
             player.playerPosition ++;
-            console.log("Posición en X: " + player.x);
         }
-        if(e.key === 'ArrowUp') {
+        if(e.key === 'ArrowUp' && !player.animationHappening) {
             player.isMovingUp = true;
+            choseOption(player.playerPosition, correctImagePosition);
             selectImages();
         }
     }
 });
-
 
 window.addEventListener('keyup', (e) => {
     keyPressed[e.key] = false;
