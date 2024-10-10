@@ -8,7 +8,7 @@ export class Player {
         this.height = 0;
         this.playerSize = 0.15;
         this.image = new Image();
-        this.image.src = '../images/playerImage.png';
+        this.image.src = '../images/playerImage.svg';
         this.xSpeed = 0.25;
         this.ySpeed = 0.01;
         this.isMovingUp = false;

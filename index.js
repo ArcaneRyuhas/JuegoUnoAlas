@@ -1,9 +1,9 @@
 import { Player } from './classes/player.js';
-import { drawObjects, updateObjectsPosition } from './classes/objects.js';
+import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
 import { drawBackground } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages, correctImagePosition } from './classes/obstacles.js';
-import { choseOption, drawLives } from './classes/gameplay.js';
+import { choseOption, drawLives, drawScore } from './classes/gameplay.js';
 
 const player = new Player();
 let keyPressed={}
@@ -13,10 +13,11 @@ function gameLoop() {
     drawBackground();
     drawImagesAndName();
     drawLives();
+    drawScore();
     player.draw();
     player.updatePosition();
-    drawObjects();
-    updateObjectsPosition();
+    drawRoadLines();
+    updateRoadLinesPosition();
     requestAnimationFrame(gameLoop);
 }
 
