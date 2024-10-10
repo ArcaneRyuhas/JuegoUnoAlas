@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego en Canvas</title>
     <script type="module" src="index.js"></script>
+    
+    <link rel="stylesheet" href="./css/index.css">
     <style>
         body {
             margin: 0;
@@ -26,8 +28,19 @@
 </head>
 
 <body>
-    <canvas id="gameCanvas"></canvas>
-    
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="overlay" id="youLostMenu">
+            <h1>Perdiste</h1>
+            <button class="green-button">Volver a jugar</button>
+            <button class="red-button">Regresar</button>
+        </div>
+        <div class="overlay" id="youWonMenu">
+            <h1>Ganaste</h1>
+            <button class="green-button">Siguiente nivel</button>
+            <button class="red-button">Regresar</button>
+        </div>
+    </div>
 </body>
 
 </html>

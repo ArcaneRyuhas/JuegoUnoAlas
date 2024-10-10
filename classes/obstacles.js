@@ -1,4 +1,5 @@
 import { canvas, ctx } from './canvas.js';
+import { images } from '../data.js';
 
 var imagesArray = [];
 var correctImage;
@@ -6,19 +7,6 @@ export var correctImagePosition;
 
 var selectedImages = new Set();
 const IMAGE_SIZE = 0.12;
-
-const imageNames = [
-    '../images/gameImages/Inodoro.png',
-    '../images/gameImages/Rinoceronte.png',
-    '../images/gameImages/Elefante.png',
-    '../images/gameImages/Huevo.png',
-    '../images/gameImages/Pera.png',
-    '../images/gameImages/Naranja.png',
-    '../images/gameImages/Regadera.png',
-    '../images/gameImages/Lavabo.png',
-    '../images/gameImages/Jirafa.png',
-    '../images/gameImages/Carne.png'
-];
 
 const imagePositions = [
     { x: 0.3, y: 0.15 },
@@ -29,10 +17,10 @@ const imagePositions = [
 function getRandomImageName() {
     let index;
     do {
-        index = Math.floor(Math.random() * imageNames.length);
+        index = Math.floor(Math.random() * images.length);
     } while (selectedImages.has(index));
     selectedImages.add(index);
-    return imageNames[index];
+    return images[index];
 }
 
 function getFileNameWithoutExtension(filePath) {
@@ -66,8 +54,6 @@ function drawImages() {
 }
 
 function drawImageName() {
-    let imageNamesWithoutExtension = getFileNameWithoutExtension(correctImage);
-
     let xRelativePosition = 0.5155 * canvas.width;
     let yRelativePosition = 0.09 * canvas.height;
 
@@ -76,7 +62,7 @@ function drawImageName() {
     ctx.textAlign = 'center';
     ctx.font = '30px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(`${imageNamesWithoutExtension}`, xRelativePosition, yRelativePosition);
+    ctx.fillText(`${correctImage}`, xRelativePosition, yRelativePosition);
 
 }
 
@@ -99,11 +85,11 @@ export function selectImages() {
     for (let i = 0; i < 3; i++) {
         let img = new Image();
         let randomImage = getRandomImageName();
-        img.src = randomImage;
+        img.src = randomImage.src;
         imagesArray.push(img);
 
         if (i == correctImagePosition) {
-            correctImage = randomImage;
+            correctImage = randomImage.name;
         }
     }
 }

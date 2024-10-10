@@ -3,8 +3,8 @@ import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
 import { drawBackground } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages, correctImagePosition } from './classes/obstacles.js';
-import { choseOption, drawLives, drawScore, gameLost, gameWon } from './classes/gameplay.js';
-import { drawGameOverMenu, drawYouWinMenu } from './classes/youLostMenu.js';
+import { choseOption, drawLives, drawScore, gameLost, gameWon, gameEnded } from './classes/gameplay.js';
+import { showYouLostMenu, showYouWinMenu } from './classes/overlay.js';
 
 const player = new Player();
 let keyPressed={}
@@ -14,10 +14,10 @@ function gameLoop() {
     drawElements();
     updateElements();
     if(gameLost){
-        drawGameOverMenu();
+        showYouLostMenu();
     }
     if(gameWon){
-        drawYouWinMenu();
+        showYouWinMenu();
     }
     requestAnimationFrame(gameLoop);
 
@@ -37,8 +37,9 @@ function updateElements(){
     updateRoadLinesPosition();
 }
 
+
 window.addEventListener('keydown', (e) => {
-    if (!keyPressed[e.key]) {
+    if (!keyPressed[e.key] && !gameEnded) {
         keyPressed[e.key] = true; 
         if (e.key === 'ArrowLeft' && player.x > 0.26 && !player.animationHappening) {
             player.x -= player.xSpeed;
