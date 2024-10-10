@@ -2,7 +2,7 @@ import { canvas, ctx } from './canvas.js';
 
 var health = 3;
 var correctAnswers = 0;
-const TOTAL_ANSWERS = 10;
+const TOTAL_ANSWERS = 2;
 const HEARTS_Y_POSITION = 0.05;
 const HEART_SIZE = 0.045;
 const heartsPositions = [
@@ -10,6 +10,8 @@ const heartsPositions = [
     { x: 0.85 },  
     { x: 0.9 }  
 ];
+export var gameLost = false;
+export var gameWon = false;
 
 var heart = new Image();
 heart.src = "../images/Heart.svg";
@@ -25,13 +27,20 @@ export function choseOption(playerPosition, correctImagePosition){
     }
     else{
         health --;
+        hasLost();
     }
 }
 
 function hasWin(){
     if (correctAnswers == TOTAL_ANSWERS){
-        console.log("HAS GANADO")
+        gameWon = true;
     } 
+}
+
+function hasLost(){
+    if (health < 1){
+        gameLost = true;
+    }
 }
 
 export function drawScore(){

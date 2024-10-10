@@ -17,11 +17,26 @@ export class Player {
     }
 
     draw() {
-        let playerPosX = this.x * canvas.width;
+        this.addNoise();
+
+        let playerPosX = (this.x * canvas.width);
         let playerPosY = this.y * canvas.height;
         this.width = canvas.width * this.playerSize; 
         this.height = canvas.height * this.playerSize + 5;
+
         ctx.drawImage(this.image, playerPosX, playerPosY, this.width, this.height);
+    }
+
+    addNoise(){
+        let randomNumber = Math.floor(Math.random() * 2);
+
+        if(randomNumber == 1){
+            this.x += 0.0002;
+            this.y += 0.0002;
+        }else{
+            this.x -= 0.0002;
+            this.y -= 0.0002;
+        }
     }
 
     playerXAnimation() {
@@ -71,3 +86,5 @@ export class Player {
         }
     }
 }
+
+

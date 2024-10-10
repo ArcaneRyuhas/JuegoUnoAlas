@@ -3,22 +3,38 @@ import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
 import { drawBackground } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages, correctImagePosition } from './classes/obstacles.js';
-import { choseOption, drawLives, drawScore } from './classes/gameplay.js';
+import { choseOption, drawLives, drawScore, gameLost, gameWon } from './classes/gameplay.js';
+import { drawGameOverMenu, drawYouWinMenu } from './classes/youLostMenu.js';
 
 const player = new Player();
 let keyPressed={}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawElements();
+    updateElements();
+    if(gameLost){
+        drawGameOverMenu();
+    }
+    if(gameWon){
+        drawYouWinMenu();
+    }
+    requestAnimationFrame(gameLoop);
+
+}
+
+function drawElements(){
     drawBackground();
     drawImagesAndName();
     drawLives();
     drawScore();
     player.draw();
-    player.updatePosition();
     drawRoadLines();
+}
+
+function updateElements(){
+    player.updatePosition();
     updateRoadLinesPosition();
-    requestAnimationFrame(gameLoop);
 }
 
 window.addEventListener('keydown', (e) => {
