@@ -7,14 +7,18 @@ import { drawLives, drawScore, gameEnded, nextLevel, restart } from './classes/g
 import { movePlayer } from './classes/listener/canvaMethods.js';
 
 const player = new Player();
+var isGameRunning = true;
 let keyPressed={}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawElements();
     updateElements();
-    if(!gameEnded){
-        requestAnimationFrame(gameLoop);
+    if (gameEnded && !player.animationHappening) {
+        isGameRunning = false;
+    }
+    if (isGameRunning) {
+        requestAnimationFrame(gameLoop); // Continuar el loop
     }
 }
 
@@ -33,6 +37,7 @@ function updateElements(){
 }
 
 function startGame(){
+    isGameRunning = true;
     selectImages();
     gameLoop();
 }

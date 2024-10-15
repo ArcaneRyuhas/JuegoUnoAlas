@@ -61,10 +61,10 @@ export function drawScore() {
 }
 
 function drawRoadmap() {
-    let xRelativePosition = 0.05 * canvas.width;
+    let xRelativePosition = 0.038 * canvas.width;
     let yRelativePosition = 0.2 * canvas.height;
 
-    let widthSize = 0.05 * canvas.width;
+    let widthSize = 0.08 * canvas.width;
     let lengthSize = 0.6 * canvas.height;
 
     ctx.drawImage(road, xRelativePosition, yRelativePosition, widthSize, lengthSize);
@@ -114,6 +114,8 @@ export function restart() {
 }
 
 export function nextLevel() {
-    level ++;
+    if(level < 5){
+        level ++;
+    }
     restart();
 }

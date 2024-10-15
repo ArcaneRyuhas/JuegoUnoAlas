@@ -57,25 +57,44 @@ function drawImageName() {
     let xRelativePosition = 0.5155 * canvas.width;
     let yRelativePosition = 0.09 * canvas.height;
 
-    drawElipse(0.5168 * canvas.width, 0.08 * canvas.height);
+    drawRoundedRect(0.395 * canvas.width, 0.02 * canvas.height);
 
+    let fontSize = canvas.width * 0.03; 
     ctx.textAlign = 'center';
-    ctx.font = '30px Arial';
-    ctx.fillStyle = 'black';
+    ctx.font = `${fontSize}px Arial`;
+    ctx.fillStyle = 'white';
     ctx.fillText(`${correctImage}`, xRelativePosition, yRelativePosition);
 
 }
 
-function drawElipse(xRelativePosition, yRelativePosition) {
+function drawRoundedRect(xRelativePosition, yRelativePosition) {
+    const width = canvas.width / 4;  // Ancho del rectángulo relativo al tamaño del canvas
+    const height = canvas.height / 9; // Alto del rectángulo relativo al tamaño del canvas
+    const borderRadius = 20;  // Radio de las esquinas redondeadas
+
+    // Comenzar el trazo
     ctx.beginPath();
-    ctx.ellipse(xRelativePosition, yRelativePosition, canvas.width / 8, canvas.height / 18, 0, 0, 2 * Math.PI); // (x, y, radioX, radioY, rotación, ánguloInicio, ánguloFin)
-    // Establecer propiedades para el contorno (stroke)
+
+    // Dibujar las esquinas redondeadas usando arcos (ctx.arc)
+    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition); // Mover a la esquina superior izquierda
+    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition); // Línea recta al borde superior derecho
+    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius); // Arco esquina superior derecha
+    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius); // Línea recta hacia abajo (borde derecho)
+    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius); // Arco esquina inferior derecha
+    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height); // Línea recta hacia el borde inferior izquierdo
+    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius); // Arco esquina inferior izquierda
+    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius); // Línea recta hacia arriba (borde izquierdo)
+    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius); // Arco esquina superior izquierda
+
+    // Establecer propiedades del contorno y del relleno
     ctx.lineWidth = 5; // Grosor del contorno
-    ctx.strokeStyle = 'black';
-    ctx.stroke(); // Dibuja el contorno del óvalo
-    ctx.fillStyle = 'white'; // Opcional: Relleno del óvalo
-    ctx.fill();
+    ctx.strokeStyle = 'black'; // Color del contorno
+    ctx.stroke(); // Dibuja el contorno
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; // Color del relleno con transparencia (alfa)
+    ctx.fill(); // Rellenar el recuadro
 }
+
 
 export function selectImages() {
     selectedImages.clear();
