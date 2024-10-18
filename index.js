@@ -1,9 +1,9 @@
 import { Player } from './classes/player.js';
 import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
-import { drawBackground } from './classes/background.js';
+import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
-import { drawLives, drawScore, gameEnded, nextLevel, restart } from './classes/gameplay.js';
+import { drawLives, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
 
 const player = new Player();
@@ -18,7 +18,7 @@ function gameLoop() {
         isGameRunning = false;
     }
     if (isGameRunning) {
-        requestAnimationFrame(gameLoop); // Continuar el loop
+        requestAnimationFrame(gameLoop); 
     }
 }
 
@@ -29,6 +29,7 @@ function drawElements(){
     drawScore();
     player.draw();
     drawRoadLines();
+    drawTimer();
 }
 
 function updateElements(){
@@ -40,6 +41,7 @@ function startGame(){
     isGameRunning = true;
     selectImages();
     gameLoop();
+    startTimer();
 }
 
 var retryButton = document.getElementById('retryButton');
@@ -51,7 +53,6 @@ retryButton.addEventListener('click', function() {
 });
 
 nextLevelButton.addEventListener('click', function(){
-    console.log("Siguiente nivel!");
     nextLevel();
     startGame();
 });
@@ -64,8 +65,19 @@ window.addEventListener('keyup', (e) => {
     keyPressed[e.key] = false;
 });
 
+canvas.addEventListener('click', () => {
+    if(startBackgroundIsDisplayed){
+        startGame();
+    }
+})
+
+function startLoop(){
+    drawStartBackground();
+    requestAnimationFrame(startLoop); 
+}
+
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-startGame();
+startLoop();
 
 

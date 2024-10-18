@@ -1,6 +1,6 @@
 import { gameEnded } from "../gameplay.js";
 import { choseOption } from "../gameplay.js";
-import { correctImagePosition, selectImages } from "../obstacles.js";
+import { correctImagePosition } from "../obstacles.js";
 
 export function movePlayer(keyPressed, e, player){
     if (!keyPressed[e.key] && !gameEnded) {
@@ -16,7 +16,6 @@ export function movePlayer(keyPressed, e, player){
         if(e.key === 'ArrowUp' && !player.animationHappening) {
             player.isMovingUp = true;
             choseOption(player.playerPosition, correctImagePosition);
-            selectImages();
         }
     }
 }
