@@ -48,10 +48,16 @@ html, body {
     display:none; 
 }
 
-.overlay h1 {
+.overlay h2 {
     color: white;
     font-size: 4vw;
     margin-bottom: 20px;
+}
+
+.overlay h3 {
+    color: white;
+    font-size: 2vw;
+    margin-bottom: 10px;
 }
 
 button {

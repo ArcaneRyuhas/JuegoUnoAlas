@@ -10,6 +10,8 @@ upArrow.src = '../images/arrowImages/upArrow.svg'; // Reemplazar con el archivo 
 const rightArrow = new Image();
 rightArrow.src = '../images/arrowImages/rightArrow.svg'; // Reemplazar con el archivo de la flecha derecha
 
+const MAX_OFFSET = 0.01;
+var offset = 0;
 export class Player {
     constructor() {
         this.x = 0.45;
@@ -94,10 +96,13 @@ export class Player {
     addNoise() {
         let randomNumber = Math.floor(Math.random() * 2);
 
-        if (randomNumber == 1) {
+        if (randomNumber == 1 && offset < MAX_OFFSET) {
+            offset += 0.0002;
             this.x += 0.0002;
             this.y += 0.0002;
-        } else {
+
+        } else if (offset > -MAX_OFFSET){
+            offset -= 0.0002; 
             this.x -= 0.0002;
             this.y -= 0.0002;
         }

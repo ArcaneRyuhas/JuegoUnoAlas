@@ -14,6 +14,7 @@ export function drawStartBackground(){
 }
 
 export function drawBackground() {
+    startBackgroundIsDisplayed = false;
     ctx.drawImage(imageBackground, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(roadBackground, canvas.width * 0.03, canvas.height * 0.13, canvas.width, canvas.height);
 }

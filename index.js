@@ -12,15 +12,19 @@ let keyPressed={}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawElements();
-    updateElements();
-    if (gameEnded && !player.animationHappening) {
-        isGameRunning = false;
-    }
+
     if (isGameRunning) {
-        requestAnimationFrame(gameLoop); 
+        drawElements();
+        updateElements();
+
+        if (gameEnded && !player.animationHappening) {
+            isGameRunning = false; // Detiene el juego adecuadamente
+        } else {
+            requestAnimationFrame(gameLoop); // Solo continúa si el juego sigue en curso
+        }
     }
 }
+
 
 function drawElements(){
     drawBackground();

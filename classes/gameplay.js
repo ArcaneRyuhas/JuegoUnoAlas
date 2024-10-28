@@ -5,6 +5,9 @@ import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu } from
 const TOTAL_HEALTH = 3;
 const HEARTS_Y_POSITION = 0.05;
 const HEART_SIZE = 0.045;
+const CORRECT_ANSWER_SCORE = 100;
+const EXTRA_SCORE_PER_LEVEL = 25;
+const WRONG_ANSWER_SCORE = -50;
 const heartsPositions = [
     { x: 0.8 },
     { x: 0.85 },
@@ -12,11 +15,13 @@ const heartsPositions = [
 ];
 
 export var gameEnded = false;
-var timeRemaining = 10;
+export var score = 0;
+export var maxScore = 0;
 var selectedOption = false;
 var health = TOTAL_HEALTH;
 var correctAnswers = 0;
 var level = 1;
+var timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
 
 var heart = new Image();
@@ -37,16 +42,31 @@ export function choseOption(playerPosition, correctImagePosition) {
 
     if (correctImagePosition == correctPlayerPosition) {
         correctAnswers++;
+        addScore();
         canvas.style.boxShadow = "0 0 10px 5px green";
         hasWin();
-    }
-    else {
+    } else {
         canvas.style.boxShadow = "0 0 10px 5px red";
         health--;
+        substractScore();
         hasLost();
     }
 
-    startTimer();
+    // Reinicia el temporizador sin condiciones adicionales
+    if (!gameEnded) {
+        startTimer();
+    }
+}
+
+
+function addScore(){
+    let extraScore = (level - 1)  * EXTRA_SCORE_PER_LEVEL;
+    let scoreToAdd = (CORRECT_ANSWER_SCORE * ( timeRemaining /levelConfiguration.find(item => item.levelNumber === level).levelSpeed)) + extraScore;
+    score += scoreToAdd;
+}
+
+function substractScore (){
+    score += WRONG_ANSWER_SCORE;
 }
 
 function hasWin() {
@@ -114,6 +134,7 @@ export function restart() {
     health = TOTAL_HEALTH;
     correctAnswers = 0;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
+    score = 0;
 
     hideYouLostMenu();
     hideYouWinMenu();
@@ -124,35 +145,48 @@ export function nextLevel() {
     if (level < 4) {
         level++;
     }
-    restart();
+    startNextLevel();
 }
+
+function startNextLevel(){
+    gameEnded = false;
+    selectedOption = false;
+    health = TOTAL_HEALTH;
+    correctAnswers = 0;
+    totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
+    
+    hideYouLostMenu();
+    hideYouWinMenu();
+    startTimer();
+}
+
+let intervalId;
 
 export function startTimer() {
-    timeRemaining = 10; 
+    if (intervalId) clearInterval(intervalId); // Limpia cualquier intervalo previo
 
-    let intervalId = setInterval(function () {
+    timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed; 
+
+    intervalId = setInterval(function () {
         timeRemaining--;
 
-        if (selectedOption && !gameEnded) {
-            selectedOption = false;
-            clearInterval(intervalId);
-        } else if (timeRemaining <= 0 && !gameEnded) {
+        if (timeRemaining <= 0 && !gameEnded) {
             choseOption(0, 1); 
-            selectedOption = false;
-            clearInterval(intervalId); 
         }
-        else if (gameEnded){
+
+        if (gameEnded) {
             clearInterval(intervalId);
         }
-    }, 1000); 
+    }, 1000);
 }
+
 
 export function drawTimer() {
     let xImagePosition = canvas.width * 0.04;  
     let yImagePosition = canvas.height * 0.05; 
     let xPosition = canvas.width * 0.07;
     let yPosition = canvas.height * 0.08; 
-    let lengthBar = ((canvas.width * 0.245) * 0.1) * timeRemaining;
+    let lengthBar = ((canvas.width * 0.245) * 0.1) * (10 / levelConfiguration.find(item => item.levelNumber === level).levelSpeed) * timeRemaining;
 
     drawRoundedRect(xPosition, yPosition, canvas.width * 0.25, canvas.height * 0.03 , 20, "black");
     drawRoundedRect(xPosition, yPosition, lengthBar, canvas.height * 0.028 , 20, "white");

@@ -12,8 +12,8 @@ export const images = [
 ]
 
 export const levelConfiguration = [
-    {levelNumber:1, totalAnswers: 4},
-    {levelNumber:2, totalAnswers: 6},
-    {levelNumber:3, totalAnswers: 8},
-    {levelNumber:4, totalAnswers: 10},
+    {levelNumber:1, totalAnswers: 4, levelSpeed: 20},
+    {levelNumber:2, totalAnswers: 6, levelSpeed: 18},
+    {levelNumber:3, totalAnswers: 8, levelSpeed: 16},
+    {levelNumber:4, totalAnswers: 10, levelSpeed: 14},
 ]
