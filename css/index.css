@@ -1,0 +1,81 @@
+html, body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    position: relative;
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameCanvas {
+    border: 2px solid black;
+    width: 90%;
+    height: 88%;
+    display: block;
+    object-fit: contain;
+}
+
+#youLostMenu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo semitransparente */
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    display:none; 
+}
+
+#youWonMenu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.9); /* Fondo semitransparente */
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    display:none; 
+}
+
+.overlay h2 {
+    color: white;
+    font-size: 4vw;
+    margin-bottom: 20px;
+}
+
+.overlay h3 {
+    color: white;
+    font-size: 2vw;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 80%;
+    padding: 10px;
+    font-size: 2vw;
+    margin: 10px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.green-button {
+    background-color: green;
+    color: white;
+}
+
+.red-button {
+    background-color: red;
+    color: white;
+}

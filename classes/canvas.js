@@ -4,7 +4,7 @@ export const ctx = canvas.getContext('2d');
 const originalWidth = canvas.width;
 const originalHeight = canvas.height;
 
-export function resizeCanvas(player) {
+export function resizeCanvas() {
     const aspectRatio = originalWidth / originalHeight;
     if (window.innerWidth / window.innerHeight > aspectRatio) {
         canvas.height = window.innerHeight;

@@ -1,46 +1,87 @@
 import { Player } from './classes/player.js';
-import { drawObjects, updateObjectsPosition } from './classes/objects.js';
-import { drawBackground } from './classes/background.js';
+import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
+import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
+import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
+import { drawLives, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer } from './classes/gameplay.js';
+import { movePlayer } from './classes/listener/canvaMethods.js';
 
 const player = new Player();
+var isGameRunning = true;
 let keyPressed={}
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBackground();
-    player.draw();
-    player.updatePosition();
-    drawObjects();
-    updateObjectsPosition();
-    requestAnimationFrame(gameLoop);
-}
 
-window.addEventListener('keydown', (e) => {
-    if (!keyPressed[e.key]) {
-        keyPressed[e.key] = true; 
-        if (e.key === 'ArrowLeft' && player.x > 0.26 && !player.animationHappening) {
-            console.log('Tecla ArrowLeft presionada');
-            player.x -= player.xSpeed;
-            player.playerPosition --;
-            console.log("Posición en X: " + player.x);
-        }
-        if (e.key === 'ArrowRight' && player.x < 0.64 && !player.animationHappening) {
-            player.x += player.xSpeed;
-            player.playerPosition ++;
-            console.log("Posición en X: " + player.x);
-        }
-        if(e.key === 'ArrowUp') {
-            player.isMovingUp = true;
+    if (isGameRunning) {
+        drawElements();
+        updateElements();
+
+        if (gameEnded && !player.animationHappening) {
+            isGameRunning = false; // Detiene el juego adecuadamente
+        } else {
+            requestAnimationFrame(gameLoop); // Solo continúa si el juego sigue en curso
         }
     }
+}
+
+
+function drawElements(){
+    drawBackground();
+    drawImagesAndName();
+    drawLives();
+    drawScore();
+    player.draw();
+    drawRoadLines();
+    drawTimer();
+}
+
+function updateElements(){
+    player.updatePosition();
+    updateRoadLinesPosition();
+}
+
+function startGame(){
+    isGameRunning = true;
+    selectImages();
+    gameLoop();
+    startTimer();
+}
+
+var retryButton = document.getElementById('retryButton');
+var nextLevelButton = document.getElementById('nextLevelButton');
+
+retryButton.addEventListener('click', function() {
+    restart();
+    startGame();
 });
 
+nextLevelButton.addEventListener('click', function(){
+    nextLevel();
+    startGame();
+});
+
+window.addEventListener('keydown', (e) => {
+    movePlayer(keyPressed, e, player);
+});
 
 window.addEventListener('keyup', (e) => {
     keyPressed[e.key] = false;
 });
 
+canvas.addEventListener('click', () => {
+    if(startBackgroundIsDisplayed){
+        startGame();
+    }
+})
+
+function startLoop(){
+    drawStartBackground();
+    requestAnimationFrame(startLoop); 
+}
+
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas(player);
-gameLoop();
+resizeCanvas();
+startLoop();
+
+
