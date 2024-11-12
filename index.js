@@ -18,9 +18,9 @@ function gameLoop() {
         updateElements();
 
         if (gameEnded && !player.animationHappening) {
-            isGameRunning = false; // Detiene el juego adecuadamente
+            isGameRunning = false;
         } else {
-            requestAnimationFrame(gameLoop); // Solo continúa si el juego sigue en curso
+            requestAnimationFrame(gameLoop);
         }
     }
 }

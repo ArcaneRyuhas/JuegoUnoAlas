@@ -17,7 +17,6 @@ const heartsPositions = [
 export var gameEnded = false;
 export var score = 0;
 export var maxScore = 0;
-var selectedOption = false;
 var health = TOTAL_HEALTH;
 var correctAnswers = 0;
 var level = 1;
@@ -26,19 +25,14 @@ var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).t
 
 var heart = new Image();
 var emptyHeart = new Image();
-var road = new Image();
-var uavCar = new Image();
 const clockImage = new Image();
 
 heart.src = "../images/Heart.svg";
 emptyHeart.src = "../images/Empty Heart.svg";
-road.src = "../images/roadMap.svg";
-uavCar.src = "../images/uavCar.svg";
 clockImage.src = "../images/clock.svg"
 
 export function choseOption(playerPosition, correctImagePosition) {
     let correctPlayerPosition = playerPosition - 1;
-    selectedOption = true;
 
     if (correctImagePosition == correctPlayerPosition) {
         correctAnswers++;
@@ -58,7 +52,6 @@ export function choseOption(playerPosition, correctImagePosition) {
     }
 }
 
-
 function addScore(){
     let extraScore = (level - 1)  * EXTRA_SCORE_PER_LEVEL;
     let scoreToAdd = (CORRECT_ANSWER_SCORE * ( timeRemaining /levelConfiguration.find(item => item.levelNumber === level).levelSpeed)) + extraScore;
@@ -72,7 +65,6 @@ function substractScore (){
 function hasWin() {
     if (correctAnswers == totalAnswers) {
         showYouWinMenu();
-        selectedOption = true;
         gameEnded = true;
     }
 }
@@ -80,35 +72,8 @@ function hasWin() {
 function hasLost() {
     if (health < 1) {
         showYouLostMenu();
-        selectedOption = true;
         gameEnded = true;
     }
-}
-
-export function drawScore() {
-    drawRoadmap();
-    drawUavCar();
-}
-
-function drawRoadmap() {
-    let xRelativePosition = 0.038 * canvas.width;
-    let yRelativePosition = 0.2 * canvas.height;
-
-    let widthSize = 0.08 * canvas.width;
-    let lengthSize = 0.6 * canvas.height;
-
-    ctx.drawImage(road, xRelativePosition, yRelativePosition, widthSize, lengthSize);
-}
-
-function drawUavCar() {
-    let xRelativePosition = 0.051 * canvas.width;
-    let yImagePosition = 0.6 - ((0.33 / totalAnswers) * correctAnswers);
-    let yRelativePosition = yImagePosition * canvas.height;
-
-    let widthSize = 0.04 * canvas.width;
-    let lengthSize = 0.18 * canvas.height;
-
-    ctx.drawImage(uavCar, xRelativePosition, yRelativePosition, widthSize, lengthSize);
 }
 
 export function drawLives() {
@@ -130,7 +95,6 @@ export function drawLives() {
 
 export function restart() {
     gameEnded = false;
-    selectedOption = false;
     health = TOTAL_HEALTH;
     correctAnswers = 0;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
@@ -150,7 +114,6 @@ export function nextLevel() {
 
 function startNextLevel(){
     gameEnded = false;
-    selectedOption = false;
     health = TOTAL_HEALTH;
     correctAnswers = 0;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
@@ -180,41 +143,52 @@ export function startTimer() {
     }, 1000);
 }
 
+//FALTA ACOMODAR BIEN EL ROUNDED_RECTANGLE 
+export function drawScore() {
+    let xRelativePosition = 0.8955 * canvas.width;
+    let yRelativePosition = 0.7 * canvas.height;
+
+    drawRoundedRect(0.81 * canvas.width, 0.63 * canvas.height);
+
+    let fontSize = canvas.width * 0.02; 
+    ctx.textAlign = 'center';
+    ctx.font = `${fontSize}px Arial`;
+    ctx.fillStyle = 'white';
+    ctx.fillText(`Puntaje: ${score.toFixed(.2)}`, xRelativePosition, yRelativePosition);
+}
 
 export function drawTimer() {
     let xImagePosition = canvas.width * 0.04;  
     let yImagePosition = canvas.height * 0.05; 
-    let xPosition = canvas.width * 0.07;
-    let yPosition = canvas.height * 0.08; 
-    let lengthBar = ((canvas.width * 0.245) * 0.1) * (10 / levelConfiguration.find(item => item.levelNumber === level).levelSpeed) * timeRemaining;
-
-    drawRoundedRect(xPosition, yPosition, canvas.width * 0.25, canvas.height * 0.03 , 20, "black");
-    drawRoundedRect(xPosition, yPosition, lengthBar, canvas.height * 0.028 , 20, "white");
+    
     ctx.drawImage(clockImage, xImagePosition , yImagePosition , canvas.width * 0.05, canvas.height * 0.1);
 }
 
-function drawRoundedRect(x, y, width, height, radius, color) {
-    if (radius > width / 2) radius = width / 2;
-    if (radius > height / 2) radius = height / 2;
+function drawRoundedRect(xRelativePosition, yRelativePosition) {
+    const width = canvas.width / 6;  // Ancho del rectángulo relativo al tamaño del canvas
+    const height = canvas.height / 9; // Alto del rectángulo relativo al tamaño del canvas
+    const borderRadius = 20;  // Radio de las esquinas redondeadas
 
+    // Comenzar el trazo
     ctx.beginPath();
-    ctx.moveTo(x + radius, y); 
 
-    ctx.lineTo(x + width - radius, y);
-    ctx.arcTo(x + width, y, x + width, y + radius, radius);
+    // Dibujar las esquinas redondeadas usando arcos (ctx.arc)
+    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition); // Mover a la esquina superior izquierda
+    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition); // Línea recta al borde superior derecho
+    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius); // Arco esquina superior derecha
+    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius); // Línea recta hacia abajo (borde derecho)
+    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius); // Arco esquina inferior derecha
+    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height); // Línea recta hacia el borde inferior izquierdo
+    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius); // Arco esquina inferior izquierda
+    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius); // Línea recta hacia arriba (borde izquierdo)
+    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius); // Arco esquina superior izquierda
 
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    // Establecer propiedades del contorno y del relleno
+    ctx.lineWidth = 5; // Grosor del contorno
+    ctx.strokeStyle = 'black'; // Color del contorno
+    ctx.stroke(); // Dibuja el contorno
 
-    ctx.lineTo(x + radius, y + height);
-    ctx.arcTo(x, y + height, x, y + height - radius, radius);
-
-    ctx.lineTo(x, y + radius);
-    ctx.arcTo(x, y, x + radius, y, radius);
-
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.stroke();  
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Color del relleno con transparencia (alfa)
+    ctx.fill(); // Rellenar el recuadro
 }
 
