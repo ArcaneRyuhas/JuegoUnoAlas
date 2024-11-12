@@ -25,11 +25,9 @@ var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).t
 
 var heart = new Image();
 var emptyHeart = new Image();
-const clockImage = new Image();
 
 heart.src = "../images/Heart.svg";
 emptyHeart.src = "../images/Empty Heart.svg";
-clockImage.src = "../images/clock.svg"
 
 export function choseOption(playerPosition, correctImagePosition) {
     let correctPlayerPosition = playerPosition - 1;
@@ -46,19 +44,18 @@ export function choseOption(playerPosition, correctImagePosition) {
         hasLost();
     }
 
-    // Reinicia el temporizador sin condiciones adicionales
     if (!gameEnded) {
         startTimer();
     }
 }
 
-function addScore(){
-    let extraScore = (level - 1)  * EXTRA_SCORE_PER_LEVEL;
-    let scoreToAdd = (CORRECT_ANSWER_SCORE * ( timeRemaining /levelConfiguration.find(item => item.levelNumber === level).levelSpeed)) + extraScore;
+function addScore() {
+    let extraScore = (level - 1) * EXTRA_SCORE_PER_LEVEL;
+    let scoreToAdd = (CORRECT_ANSWER_SCORE * (timeRemaining / levelConfiguration.find(item => item.levelNumber === level).levelSpeed)) + extraScore;
     score += scoreToAdd;
 }
 
-function substractScore (){
+function substractScore() {
     score += WRONG_ANSWER_SCORE;
 }
 
@@ -112,12 +109,12 @@ export function nextLevel() {
     startNextLevel();
 }
 
-function startNextLevel(){
+function startNextLevel() {
     gameEnded = false;
     health = TOTAL_HEALTH;
     correctAnswers = 0;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
-    
+
     hideYouLostMenu();
     hideYouWinMenu();
     startTimer();
@@ -126,15 +123,15 @@ function startNextLevel(){
 let intervalId;
 
 export function startTimer() {
-    if (intervalId) clearInterval(intervalId); // Limpia cualquier intervalo previo
+    if (intervalId) clearInterval(intervalId);
 
-    timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed; 
+    timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 
     intervalId = setInterval(function () {
         timeRemaining--;
 
         if (timeRemaining <= 0 && !gameEnded) {
-            choseOption(0, 1); 
+            choseOption(0, 1);
         }
 
         if (gameEnded) {
@@ -150,45 +147,101 @@ export function drawScore() {
 
     drawRoundedRect(0.81 * canvas.width, 0.63 * canvas.height);
 
-    let fontSize = canvas.width * 0.02; 
+    let fontSize = canvas.width * 0.02;
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
     ctx.fillText(`Puntaje: ${score.toFixed(.2)}`, xRelativePosition, yRelativePosition);
 }
 
-export function drawTimer() {
-    let xImagePosition = canvas.width * 0.04;  
-    let yImagePosition = canvas.height * 0.05; 
-    
-    ctx.drawImage(clockImage, xImagePosition , yImagePosition , canvas.width * 0.05, canvas.height * 0.1);
-}
-
 function drawRoundedRect(xRelativePosition, yRelativePosition) {
-    const width = canvas.width / 6;  // Ancho del rectángulo relativo al tamaño del canvas
-    const height = canvas.height / 9; // Alto del rectángulo relativo al tamaño del canvas
-    const borderRadius = 20;  // Radio de las esquinas redondeadas
+    const width = canvas.width / 6;
+    const height = canvas.height / 9;
+    const borderRadius = 20;
 
-    // Comenzar el trazo
     ctx.beginPath();
 
-    // Dibujar las esquinas redondeadas usando arcos (ctx.arc)
-    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition); // Mover a la esquina superior izquierda
-    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition); // Línea recta al borde superior derecho
-    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius); // Arco esquina superior derecha
-    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius); // Línea recta hacia abajo (borde derecho)
-    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius); // Arco esquina inferior derecha
-    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height); // Línea recta hacia el borde inferior izquierdo
-    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius); // Arco esquina inferior izquierda
-    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius); // Línea recta hacia arriba (borde izquierdo)
-    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius); // Arco esquina superior izquierda
+    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition);
+    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition);
+    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius);
+    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius);
+    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius);
+    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height);
+    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius);
+    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius);
+    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius);
 
-    // Establecer propiedades del contorno y del relleno
-    ctx.lineWidth = 5; // Grosor del contorno
-    ctx.strokeStyle = 'black'; // Color del contorno
-    ctx.stroke(); // Dibuja el contorno
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Color del relleno con transparencia (alfa)
-    ctx.fill(); // Rellenar el recuadro
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fill();
+}
+
+export function drawTimer() {
+    let x = canvas.width * 0.1;
+    let y = canvas.height * 0.2;
+    let outerRadius = (canvas.width + canvas.height) * .05;
+    let outerAlpha = 0.7;
+    let innerRadius = (canvas.width + canvas.height) * .02;
+
+    //DRAW CLOCK
+    drawCircle(x, y, outerRadius, outerAlpha);
+    drawOuterCircle(x, y, outerRadius, outerAlpha)
+    drawCircle(x, y, innerRadius, 1);
+    drawTimeRemaining(x,y);
+    
+}
+
+function drawTimeRemaining(x,y){
+    let fontSize = canvas.width * 0.03; 
+    ctx.textAlign = 'center';
+    ctx.font = `${fontSize}px Arial`;
+    ctx.fillStyle = 'black';
+
+    // Escribe el texto en el canvas
+    ctx.fillText(timeRemaining, x + 1, y + 18); // Dibuja el texto rellenado
+}
+
+function drawCircle(x, y, radius, alpha) {
+
+    ctx.fillStyle = `rgba(217, 217, 217, ${alpha})`;
+    ctx.strokeStyle = "black"
+    ctx.lineWidth = 4;
+
+    //Draw outside line of the circle
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.stroke();
+
+    //draw to fill the circle
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawOuterCircle(x, y, radius) {
+
+    ctx.fillStyle = `black`;
+    ctx.strokeStyle = "black"
+    ctx.lineWidth = 4;
+
+    let value = timeRemaining / levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
+    let sweep = 1 - value;
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(x, y, radius, 0, 2 * Math.PI * sweep);
+    ctx.closePath();
+    ctx.fill();
 }
 

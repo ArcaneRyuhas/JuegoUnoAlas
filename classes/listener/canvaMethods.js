@@ -9,7 +9,7 @@ export function movePlayer(keyPressed, e, player){
             player.x -= player.xSpeed;
             player.playerPosition --;
         }
-        if (e.key === 'ArrowRight' && player.x < 0.64 && !player.animationHappening) {
+        if (e.key === 'ArrowRight' && player.x < 0.54 && !player.animationHappening) {
             player.x += player.xSpeed;
             player.playerPosition ++;
         }
