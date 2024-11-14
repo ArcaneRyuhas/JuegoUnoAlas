@@ -3,7 +3,7 @@ import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
 import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
-import { drawLives, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer } from './classes/gameplay.js';
+import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
 
 const player = new Player();
@@ -29,7 +29,7 @@ function gameLoop() {
 function drawElements(){
     drawBackground();
     drawImagesAndName();
-    drawLives();
+    drawImage();
     drawScore();
     player.draw();
     drawRoadLines();

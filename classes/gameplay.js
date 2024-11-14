@@ -1,33 +1,22 @@
 import { canvas, ctx } from './canvas.js';
-import { levelConfiguration } from '../data.js';
+import { imagesPerLevel, levelConfiguration } from '../data.js';
 import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu } from './overlay.js';
 
-const TOTAL_HEALTH = 3;
-const HEARTS_Y_POSITION = 0.05;
-const HEART_SIZE = 0.045;
 const CORRECT_ANSWER_SCORE = 100;
 const EXTRA_SCORE_PER_LEVEL = 25;
 const WRONG_ANSWER_SCORE = -50;
-const heartsPositions = [
-    { x: 0.8 },
-    { x: 0.85 },
-    { x: 0.9 }
-];
 
 export var gameEnded = false;
 export var score = 0;
 export var maxScore = 0;
-var health = TOTAL_HEALTH;
-var correctAnswers = 0;
+var correctAnswers = 3;
 var level = 1;
 var timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
 
-var heart = new Image();
-var emptyHeart = new Image();
+var image = new Image();
 
-heart.src = "../images/Heart.svg";
-emptyHeart.src = "../images/Empty Heart.svg";
+image.src = "../images/dinosaurs/FirstDinosaur.png";
 
 export function choseOption(playerPosition, correctImagePosition) {
     let correctPlayerPosition = playerPosition - 1;
@@ -39,7 +28,7 @@ export function choseOption(playerPosition, correctImagePosition) {
         hasWin();
     } else {
         canvas.style.boxShadow = "0 0 10px 5px red";
-        health--;
+        correctAnswers--;
         substractScore();
         hasLost();
     }
@@ -63,37 +52,56 @@ function hasWin() {
     if (correctAnswers == totalAnswers) {
         showYouWinMenu();
         gameEnded = true;
+        showConfetti();
     }
 }
 
+function showConfetti() {
+    const duration = 5 * 1000,
+        animationEnd = Date.now() + duration,
+        defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+
+
+    const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+
+        // since particles fall down, start a bit higher than random
+        confetti(
+            Object.assign({}, defaults, {
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+            })
+        );
+        confetti(
+            Object.assign({}, defaults, {
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+            })
+        );
+    }, 250);
+}
+
+function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 function hasLost() {
-    if (health < 1) {
+    if (correctAnswers < 1) {
         showYouLostMenu();
         gameEnded = true;
     }
 }
 
-export function drawLives() {
-
-    let yRelativePosition = HEARTS_Y_POSITION * canvas.height;
-    let relativeSize = HEART_SIZE * canvas.width;
-
-    for (let i = 0; i < 3; i++) {
-        let xRelativePosition = heartsPositions[i].x * canvas.width;
-
-        if (i < health) {
-            ctx.drawImage(heart, xRelativePosition, yRelativePosition, relativeSize, relativeSize);
-        }
-        else {
-            ctx.drawImage(emptyHeart, xRelativePosition, yRelativePosition, relativeSize, relativeSize);
-        }
-    }
-}
-
 export function restart() {
     gameEnded = false;
-    health = TOTAL_HEALTH;
-    correctAnswers = 0;
+    correctAnswers = 3;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
     score = 0;
 
@@ -111,9 +119,9 @@ export function nextLevel() {
 
 function startNextLevel() {
     gameEnded = false;
-    health = TOTAL_HEALTH;
-    correctAnswers = 0;
+    correctAnswers = 3;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
+    image.src= imagesPerLevel.find(item => item.levelNumber === level).src;
 
     hideYouLostMenu();
     hideYouWinMenu();
@@ -186,22 +194,19 @@ export function drawTimer() {
     let outerAlpha = 0.7;
     let innerRadius = (canvas.width + canvas.height) * .02;
 
-    //DRAW CLOCK
     drawCircle(x, y, outerRadius, outerAlpha);
     drawOuterCircle(x, y, outerRadius, outerAlpha)
     drawCircle(x, y, innerRadius, 1);
-    drawTimeRemaining(x,y);
-    
+    drawTimeRemaining(x, y);
 }
 
-function drawTimeRemaining(x,y){
-    let fontSize = canvas.width * 0.03; 
+function drawTimeRemaining(x, y) {
+    let fontSize = canvas.width * 0.03;
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'black';
 
-    // Escribe el texto en el canvas
-    ctx.fillText(timeRemaining, x + 1, y + 18); // Dibuja el texto rellenado
+    ctx.fillText(timeRemaining, x + 1, y + 18);
 }
 
 function drawCircle(x, y, radius, alpha) {
@@ -244,4 +249,49 @@ function drawOuterCircle(x, y, radius) {
     ctx.closePath();
     ctx.fill();
 }
+
+export function drawImage() {
+
+    let rows = totalAnswers / 2;
+    let cols = 2;
+    let sectionWidth = image.width / cols;
+    let sectionHeight = image.height / rows;
+    let iterations = 0;
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            let x = col * sectionWidth;
+            let y = row * sectionHeight;
+            let width = canvas.width * 0.23;
+            let height = canvas.height * 0.55;
+            let imageX = col * (width / cols) + canvas.width * 0.75;
+            let imageY = row * (height / rows) + (canvas.height * 0.06);
+            let imageWidth = width / cols;
+            let imageHeight = height / rows;
+
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(imageX, imageY, imageWidth, imageHeight);
+
+            ctx.drawImage(
+                image,
+                x, y, sectionWidth, sectionHeight,
+                imageX, imageY,
+                imageWidth, imageHeight
+            );
+
+            if (iterations >= correctAnswers) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(
+                    col * (width / cols) + (canvas.width * 0.75), row * (height / rows) + (canvas.height * 0.06),
+                    width / cols, height / rows
+                );
+            }
+            iterations++;
+        }
+    }
+
+}
+
+
 

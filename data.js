@@ -12,8 +12,17 @@ export const images = [
 ]
 
 export const levelConfiguration = [
-    {levelNumber:1, totalAnswers: 4, levelSpeed: 20},
-    {levelNumber:2, totalAnswers: 6, levelSpeed: 18},
+    {levelNumber:1, totalAnswers: 6, levelSpeed: 20},
+    {levelNumber:2, totalAnswers: 8, levelSpeed: 18},
     {levelNumber:3, totalAnswers: 8, levelSpeed: 16},
     {levelNumber:4, totalAnswers: 10, levelSpeed: 14},
+    {levelNumber:5, totalAnswers: 10, levelSpeed:10}
+]
+
+export const imagesPerLevel = [
+    {levelNumber:1, src:'../images/dinosaurs/FirstDinosaur.png'},
+    {levelNumber:2, src:'../images/dinosaurs/SecondDinosaur.png'},
+    {levelNumber:3, src:'../images/dinosaurs/ThirdDinosaur.png'},
+    {levelNumber:4, src:'../images/dinosaurs/FourthDinosaur.png'},
+    {levelNumber:5, src:'../images/dinosaurs/FifthDinosaur.png'},
 ]
