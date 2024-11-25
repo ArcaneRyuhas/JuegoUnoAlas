@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego en Canvas</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
     <script type="module" src="index.js"></script>
-    
     <link rel="stylesheet" href="./css/index.css">
     <style>
         body {
@@ -34,13 +34,13 @@
             <h2>Perdiste</h2>
             <h3 id="scoreOne">Puntaje:</h3>
             <button id="retryButton" class="green-button">Volver a jugar</button>
-            <button class="red-button">Regresar</button>
+            <button id="restartButton" class="red-button">Reiniciar</button>
         </div>
         <div class="overlay" id="youWonMenu">
             <h2>Ganaste</h2>
             <h3 id="scoreTwo">Puntaje:</h3>
             <button id="nextLevelButton" class="green-button">Siguiente nivel</button>
-            <button class="red-button">Regresar</button>
+            <button id="restartButtonTwo" class="red-button">Reiniciar</button>
         </div>
     </div>
 </body>

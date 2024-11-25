@@ -14,13 +14,13 @@ const MAX_OFFSET = 0.01;
 var offset = 0;
 export class Player {
     constructor() {
-        this.x = 0.45;
+        this.x = 0.37;
         this.y = 0.8;
         this.width = 0;
         this.height = 0;
         this.playerSize = 0.15;
         this.image = new Image();
-        this.image.src = '../images/playerImage.svg'; // Tu imagen del carro
+        this.image.src = '../images/playerImage.svg'; 
         this.xSpeed = 0.27;
         this.ySpeed = 0.01;
         this.isMovingUp = false;
@@ -49,15 +49,13 @@ export class Player {
         let upArrowPosY = 0.5 * canvas.height;
         let arrowsPosY = 0.8 * canvas.height;
     
-        // Inicializamos la opacidad (globalAlpha)
         if (this.alpha === undefined) {
-            this.alpha = 1.0; // La opacidad empieza en 1 (completamente visible)
+            this.alpha = 1.0; 
         }
     
-        // Reducir la opacidad gradualmente
-        this.alpha -= 0.003; // Disminuye la opacidad (ajustar velocidad de fade)
+        this.alpha -= 0.003; 
         if (this.alpha < 0) {
-            this.alpha = 0; // Evita que sea negativa
+            this.alpha = 0; 
         }
     
         ctx.globalAlpha = this.alpha;
@@ -65,27 +63,33 @@ export class Player {
         if (!this.animationHappening) {
             switch (this.playerPosition) {
                 case 1:
-                    rightArrowPosX = 0.45 * canvas.width;
-                    upArrowPosX = 0.27 * canvas.width;
-    
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
+                    rightArrowPosX = 0.39 * canvas.width;
+                    upArrowPosX = 0.18 * canvas.width;
+
                     ctx.drawImage(rightArrow, rightArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
                 case 2:
-                    leftArrowPosX = 0.2 * canvas.width;
-                    rightArrowPosX = 0.76 * canvas.width;
-                    upArrowPosX = 0.47 * canvas.width;
+                    leftArrowPosX = 0.13 * canvas.width;
+                    rightArrowPosX = 0.67 * canvas.width;
+                    upArrowPosX = 0.395 * canvas.width;
     
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     ctx.drawImage(leftArrow, leftArrowPosX, arrowsPosY, arrowSize, arrowSize);
                     ctx.drawImage(rightArrow, rightArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
                 case 3:
-                    leftArrowPosX = 0.46 * canvas.width;
-                    upArrowPosX = 0.70 * canvas.width;
+                    leftArrowPosX = 0.39 * canvas.width;
+                    upArrowPosX = 0.61 * canvas.width;
     
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     ctx.drawImage(leftArrow, leftArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
             }
         }
@@ -111,7 +115,7 @@ export class Player {
     playerXAnimation() {
         switch (this.playerPosition) {
             case 1:
-                this.x += 0.0023;
+                this.x += 0.0025;
                 break;
             case 2:
                 this.x += 0.0005;
@@ -125,7 +129,7 @@ export class Player {
     playerXReturnAnimation() {
         switch (this.playerPosition) {
             case 1:
-                this.x -= 0.0023;
+                this.x -= 0.0025;
                 break;
             case 2:
                 this.x -= 0.0005;

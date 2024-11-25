@@ -3,8 +3,9 @@ import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
 import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
-import { drawLives, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer } from './classes/gameplay.js';
+import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer, restartGame } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
+import { hideYouLostMenu, hideYouWinMenu } from './classes/overlay.js';
 
 const player = new Player();
 var isGameRunning = true;
@@ -18,18 +19,17 @@ function gameLoop() {
         updateElements();
 
         if (gameEnded && !player.animationHappening) {
-            isGameRunning = false; // Detiene el juego adecuadamente
+            isGameRunning = false;
         } else {
-            requestAnimationFrame(gameLoop); // Solo continúa si el juego sigue en curso
+            requestAnimationFrame(gameLoop);
         }
     }
 }
 
-
 function drawElements(){
     drawBackground();
     drawImagesAndName();
-    drawLives();
+    drawImage();
     drawScore();
     player.draw();
     drawRoadLines();
@@ -50,6 +50,8 @@ function startGame(){
 
 var retryButton = document.getElementById('retryButton');
 var nextLevelButton = document.getElementById('nextLevelButton');
+var restartButton = document.getElementById('restartButton');
+var restartButtonTwo = document.getElementById('restartButtonTwo')
 
 retryButton.addEventListener('click', function() {
     restart();
@@ -60,6 +62,18 @@ nextLevelButton.addEventListener('click', function(){
     nextLevel();
     startGame();
 });
+
+restartButton.addEventListener('click', function(){
+    hideYouWinMenu();
+    hideYouLostMenu();
+    restartGame();
+});
+
+restartButtonTwo.addEventListener('click', function(){
+    hideYouWinMenu();
+    hideYouLostMenu();
+    restartGame();
+})
 
 window.addEventListener('keydown', (e) => {
     movePlayer(keyPressed, e, player);

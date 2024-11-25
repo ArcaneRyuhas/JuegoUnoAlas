@@ -6,12 +6,12 @@ const OBJECT_COLOR = 'white';
 const OBJECT_SPEED = 0.01;
 
 const roadLines = [
-    { x: 0.42, y: 0.4, width: 8, height: 90, xSpeed:-0.001, objectX:0.42 , angle:0.2},
-    { x: 0.62, y: 0.4, width: 8, height: 90, xSpeed:0.001, objectX:0.62, angle:160},
-    { x: 0.40, y: 0.6, width: 8, height: 90, xSpeed:-0.001, objectX:0.42, angle:0.2},
-    { x: 0.64, y: 0.6, width: 8, height: 90, xSpeed:0.001, objectX:0.62, angle:160},
-    { x: 0.38, y: 0.8, width: 8, height: 90, xSpeed:-0.001, objectX:0.42, angle:0.2},
-    { x: 0.66, y: 0.8, width: 8, height: 90, xSpeed:0.001, objectX:0.62, angle:160},
+    { x: 0.36, y: 0.4, width: 8, height: 90, xSpeed:-0.0015, objectX:0.36 , angle:0.3},
+    { x: 0.53, y: 0.4, width: 8, height: 90, xSpeed:0.0015, objectX:0.53, angle:2.8},
+    { x: 0.34, y: 0.6, width: 8, height: 90, xSpeed:-0.0015, objectX:0.36, angle:0.3},
+    { x: 0.56, y: 0.6, width: 8, height: 90, xSpeed:0.0015, objectX:0.53, angle:2.8},
+    { x: 0.32, y: 0.8, width: 8, height: 90, xSpeed:-0.0015, objectX:0.36, angle:0.3},
+    { x: 0.59, y: 0.8, width: 8, height: 90, xSpeed:0.0015, objectX:0.53, angle:2.8},
 
 ];
 

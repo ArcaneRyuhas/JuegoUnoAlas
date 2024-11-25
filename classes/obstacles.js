@@ -9,9 +9,9 @@ var selectedImages = new Set();
 const IMAGE_SIZE = 0.12;
 
 const imagePositions = [
-    { x: 0.3, y: 0.15 },
-    { x: 0.46, y: 0.15 },
-    { x: 0.62, y: 0.15 }
+    { x: 0.23, y: 0.15 },
+    { x: 0.385, y: 0.15 },
+    { x: 0.54, y: 0.15 }
 ];
 
 function getRandomImageName() {
@@ -21,11 +21,6 @@ function getRandomImageName() {
     } while (selectedImages.has(index));
     selectedImages.add(index);
     return images[index];
-}
-
-function getFileNameWithoutExtension(filePath) {
-    const fileName = filePath.split('/').pop();
-    return fileName.split('.')[0];
 }
 
 export function drawImagesAndName() {
@@ -41,12 +36,10 @@ function drawImages() {
         let yRelativePosition = imagePositions[index].y * canvas.height;
         let relativeSize = canvas.width * IMAGE_SIZE;
 
-        // Dibuja el contorno (rectángulo detrás de la imagen)
-        ctx.strokeStyle = 'black';  // Color del contorno
-        ctx.lineWidth = 5;          // Grosor del contorno
+        ctx.strokeStyle = 'black';  
+        ctx.lineWidth = 5;          
         ctx.strokeRect(xRelativePosition - 2, yRelativePosition - 2, relativeSize + 4, relativeSize + 4);  // Contorno alrededor de la imagen
 
-        // Dibuja la imagen
         ctx.drawImage(image, xRelativePosition, yRelativePosition, relativeSize, relativeSize);
 
         index++;
@@ -54,17 +47,16 @@ function drawImages() {
 }
 
 function drawImageName() {
-    let xRelativePosition = 0.5155 * canvas.width;
+    let xRelativePosition = 0.45 * canvas.width;
     let yRelativePosition = 0.09 * canvas.height;
 
-    drawRoundedRect(0.395 * canvas.width, 0.02 * canvas.height);
+    drawRoundedRect(0.325 * canvas.width, 0.02 * canvas.height);
 
     let fontSize = canvas.width * 0.03; 
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
     ctx.fillText(`${correctImage}`, xRelativePosition, yRelativePosition);
-
 }
 
 function drawRoundedRect(xRelativePosition, yRelativePosition) {
