@@ -47,10 +47,10 @@ function drawImages() {
 }
 
 function drawImageName() {
-    let xRelativePosition = 0.5155 * canvas.width;
+    let xRelativePosition = 0.45 * canvas.width;
     let yRelativePosition = 0.09 * canvas.height;
 
-    drawRoundedRect(0.395 * canvas.width, 0.02 * canvas.height);
+    drawRoundedRect(0.325 * canvas.width, 0.02 * canvas.height);
 
     let fontSize = canvas.width * 0.03; 
     ctx.textAlign = 'center';

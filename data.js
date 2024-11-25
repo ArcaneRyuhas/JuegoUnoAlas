@@ -1,14 +1,14 @@
 export const images = [
-    { name: "Inodoro", src: '../images/gameImages/Inodoro.png'},
-    { name: "Rinoceronte" , src:'../images/gameImages/Rinoceronte.png'},
-    { name: "Elefante", src: '../images/gameImages/Elefante.png',},
-    { name: "Huevo", src:'../images/gameImages/Huevo.png' },
-    { name: "Pera", src:'../images/gameImages/Pera.png' },
-    { name: "Naranja", src:'../images/gameImages/Naranja.png' },
-    { name: "Regadera", src:'../images/gameImages/Regadera.png' },
-    { name: "Lavabo", src: '../images/gameImages/Lavabo.png'},
-    { name: "Jirafa", src: '../images/gameImages/Jirafa.png'},
-    { name: "Carne", src: '../images/gameImages/Carne.png'}
+    { name: "inodoro", src: '../images/gameImages/Inodoro.png'},
+    { name: "rinoceronte" , src:'../images/gameImages/Rinoceronte.png'},
+    { name: "elefante", src: '../images/gameImages/Elefante.png',},
+    { name: "huevo", src:'../images/gameImages/Huevo.png' },
+    { name: "pera", src:'../images/gameImages/Pera.png' },
+    { name: "naranja", src:'../images/gameImages/Naranja.png' },
+    { name: "regadera", src:'../images/gameImages/Regadera.png' },
+    { name: "lavabo", src: '../images/gameImages/Lavabo.png'},
+    { name: "jirafa", src: '../images/gameImages/Jirafa.png'},
+    { name: "carne", src: '../images/gameImages/Carne.png'}
 ]
 
 export const levelConfiguration = [

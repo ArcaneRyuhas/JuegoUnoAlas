@@ -65,25 +65,31 @@ export class Player {
                 case 1:
                     rightArrowPosX = 0.39 * canvas.width;
                     upArrowPosX = 0.18 * canvas.width;
-    
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
+
                     ctx.drawImage(rightArrow, rightArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
                 case 2:
                     leftArrowPosX = 0.13 * canvas.width;
                     rightArrowPosX = 0.67 * canvas.width;
                     upArrowPosX = 0.395 * canvas.width;
     
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     ctx.drawImage(leftArrow, leftArrowPosX, arrowsPosY, arrowSize, arrowSize);
                     ctx.drawImage(rightArrow, rightArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
                 case 3:
                     leftArrowPosX = 0.39 * canvas.width;
                     upArrowPosX = 0.61 * canvas.width;
     
-                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     ctx.drawImage(leftArrow, leftArrowPosX, arrowsPosY, arrowSize, arrowSize);
+
+                    ctx.globalAlpha = 0.5
+                    ctx.drawImage(upArrow, upArrowPosX, upArrowPosY, arrowSize, arrowSize);
                     break;
             }
         }

@@ -16,7 +16,7 @@ var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).t
 
 var image = new Image();
 
-image.src = "../images/dinosaurs/FirstDinosaur.png";
+image.src = imagesPerLevel.find(item => item.levelNumber === level).src;
 
 export function choseOption(playerPosition, correctImagePosition) {
     let correctPlayerPosition = playerPosition - 1;
@@ -57,20 +57,18 @@ function hasWin() {
 }
 
 function showConfetti() {
-    const duration = 5 * 1000,
+    var duration = 5 * 1000,
         animationEnd = Date.now() + duration,
         defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-
-
-    const interval = setInterval(function () {
+    var interval = setInterval(function () {
         const timeLeft = animationEnd - Date.now();
 
         if (timeLeft <= 0) {
             return clearInterval(interval);
         }
 
-        const particleCount = 50 * (timeLeft / duration);
+        var particleCount = 50 * (timeLeft / duration);
 
         // since particles fall down, start a bit higher than random
         confetti(
@@ -215,13 +213,11 @@ function drawCircle(x, y, radius, alpha) {
     ctx.strokeStyle = "black"
     ctx.lineWidth = 4;
 
-    //Draw outside line of the circle
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.closePath();
     ctx.stroke();
 
-    //draw to fill the circle
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
@@ -265,7 +261,7 @@ export function drawImage() {
             let width = canvas.width * 0.23;
             let height = canvas.height * 0.55;
             let imageX = col * (width / cols) + canvas.width * 0.75;
-            let imageY = row * (height / rows) + (canvas.height * 0.06);
+            let imageY = row * (height / rows) + (canvas.height * 0.03);
             let imageWidth = width / cols;
             let imageHeight = height / rows;
 
@@ -283,7 +279,7 @@ export function drawImage() {
             if (iterations >= correctAnswers) {
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
                 ctx.fillRect(
-                    col * (width / cols) + (canvas.width * 0.75), row * (height / rows) + (canvas.height * 0.06),
+                    col * (width / cols) + (canvas.width * 0.75), row * (height / rows) + (canvas.height * 0.03),
                     width / cols, height / rows
                 );
             }
@@ -291,6 +287,14 @@ export function drawImage() {
         }
     }
 
+}
+
+export function restartGame(){
+    level = 1;
+    score = 0;
+    maxScore = 0;
+    image.src= imagesPerLevel.find(item => item.levelNumber === level).src;
+    restart();
 }
 
 
