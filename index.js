@@ -1,6 +1,6 @@
 import { Player } from './classes/player.js';
 import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
-import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
+import { drawBackground, drawSplashScreen, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
 import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer, restartGame } from './classes/gameplay.js';
@@ -8,7 +8,7 @@ import { movePlayer } from './classes/listener/canvaMethods.js';
 import { hideYouLostMenu, hideYouWinMenu } from './classes/overlay.js';
 
 const player = new Player();
-var isGameRunning = true;
+export var isGameRunning = true;
 let keyPressed={}
 
 function gameLoop() {
@@ -43,6 +43,7 @@ function updateElements(){
 
 function startGame(){
     isGameRunning = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     selectImages();
     gameLoop();
     startTimer();
@@ -83,15 +84,21 @@ window.addEventListener('keyup', (e) => {
     keyPressed[e.key] = false;
 });
 
+let click = false;
+
 canvas.addEventListener('click', () => {
-    if(startBackgroundIsDisplayed){
-        startGame();
+    if(startBackgroundIsDisplayed && !click){
+        click = true;
+        drawSplashScreen();
+        setTimeout(startGame, 5000);
     }
 })
 
 function startLoop(){
     drawStartBackground();
-    requestAnimationFrame(startLoop); 
+    if(isGameRunning){
+        requestAnimationFrame(startLoop); 
+    }
 }
 
 window.addEventListener('resize', resizeCanvas);
