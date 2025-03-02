@@ -6,6 +6,8 @@ import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
 import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer, restartGame } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
 import { hideYouLostMenu, hideYouWinMenu } from './classes/overlay.js';
+import { maxScore } from './classes/gameplay.js';
+import { showLeaderboard, hideScoreDiv, hideLeaderboard} from './classes/overlay.js';
 
 const player = new Player();
 export var isGameRunning = true;
@@ -76,6 +78,11 @@ restartButtonTwo.addEventListener('click', function(){
     restartGame();
 })
 
+restartButtonThree.addEventListener('click', function(){
+    hideLeaderboard();
+    restartGame();
+})
+
 window.addEventListener('keydown', (e) => {
     movePlayer(keyPressed, e, player);
 });
@@ -99,6 +106,43 @@ function startLoop(){
     if(isGameRunning){
         requestAnimationFrame(startLoop); 
     }
+}
+
+const scores = [];
+
+const scoreForm = document.getElementById("scoreForm");
+const playerNameInput = document.getElementById("playerName");
+const leaderboardList = document.getElementById("leaderboardList");
+
+
+scoreForm.addEventListener("submit", function(event) {
+    event.preventDefault(); 
+
+    const playerName = playerNameInput.value.trim().toUpperCase(); 
+    const playerScore = maxScore;
+
+    if (playerName.length > 1 && playerName.length < 10) { 
+        scores.push({ name: playerName, score: playerScore }); 
+        scores.sort((a, b) => b.score - a.score); 
+        updateLeaderboard(); 
+        playerNameInput.value = ""; 
+        hideScoreDiv();
+        showLeaderboard();
+        console.log(scores);
+    } else {
+        alert("El nombre debe tener de 1 a 10 letras.");
+    }
+    
+});
+
+function updateLeaderboard() {
+    leaderboardList.innerHTML = ""; 
+
+    scores.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = `${entry.name} - ${entry.score} pts`;
+        leaderboardList.appendChild(li);
+    });
 }
 
 window.addEventListener('resize', resizeCanvas);

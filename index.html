@@ -33,10 +33,17 @@
         <div class="score-effect" id="scoreEffect">
             <p id="score">Puntaje:</p>
         </div>
+        <div id="score">
+            <h2>Introduce tu nombre</h2>
+            <form id="scoreForm">
+                <input type="text" id="playerName" name="playerName" maxlength="10" required>
+                <button type="submit" class="green-button">Añadir</button>
+            </form>
+        </div>
         <div id="leaderboard">
             <h2>Leaderboard</h2>
             <ol id="leaderboardList"></ol>
-            <button id="restartButton" class="green-button">Volver a jugar</button>
+            <button id="restartButtonThree" class="green-button">Volver a jugar</button>
         </div>
         <div class="overlay" id="youLostMenu">
             <h2>Perdiste</h2>

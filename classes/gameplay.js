@@ -1,6 +1,6 @@
 import { canvas, ctx } from './canvas.js';
 import { imagesPerLevel, levelConfiguration } from '../data.js';
-import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu } from './overlay.js';
+import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu, showScoreDiv } from './overlay.js';
 
 const CORRECT_ANSWER_SCORE = 100;
 const EXTRA_SCORE_PER_LEVEL = 25;
@@ -69,7 +69,12 @@ function substractScore() {
 
 function hasWin() {
     if (correctAnswers == totalAnswers) {
-        showYouWinMenu();
+        if (level === 5) {
+            showScoreDiv();
+        }
+        else {
+            showYouWinMenu();
+        }
         gameEnded = true;
         showConfetti();
     }
