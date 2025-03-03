@@ -103,7 +103,8 @@ button {
     width: 90%;
     max-width: 500px;
     text-align: center;
-    visibility: hidden;
+    visibility: block;
+    z-index: 1000;
 }
 
 #leaderboard h2 {
@@ -122,7 +123,7 @@ button {
     font-size: 1rem;
 }
 
-#score {
+#scoreDiv {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -133,10 +134,11 @@ button {
     border-radius: 10px;
     width: 90%;
     max-width: 400px;
+    visibility: block;
     text-align: center;
 }
 
-#score h2 {
+#scoreDiv h2 {
     margin: 0;
     text-align: center;
     font-size: 2.5rem;

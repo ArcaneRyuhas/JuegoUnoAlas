@@ -6,7 +6,7 @@ import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
 import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer, restartGame } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
 import { hideYouLostMenu, hideYouWinMenu } from './classes/overlay.js';
-import { maxScore } from './classes/gameplay.js';
+import { score } from './classes/gameplay.js';
 import { showLeaderboard, hideScoreDiv, hideLeaderboard} from './classes/overlay.js';
 
 const player = new Player();
@@ -70,17 +70,20 @@ restartButton.addEventListener('click', function(){
     hideYouWinMenu();
     hideYouLostMenu();
     restartGame();
+    startGame();
 });
 
 restartButtonTwo.addEventListener('click', function(){
     hideYouWinMenu();
     hideYouLostMenu();
     restartGame();
+    startGame();
 })
 
 restartButtonThree.addEventListener('click', function(){
     hideLeaderboard();
     restartGame();
+    startGame();
 })
 
 window.addEventListener('keydown', (e) => {
@@ -108,22 +111,28 @@ function startLoop(){
     }
 }
 
-const scores = [];
+const storedScores = localStorage.getItem("scores");
+const scores = storedScores ? JSON.parse(storedScores) : [];
 
 const scoreForm = document.getElementById("scoreForm");
 const playerNameInput = document.getElementById("playerName");
 const leaderboardList = document.getElementById("leaderboardList");
 
 
+updateLeaderboard();
+
 scoreForm.addEventListener("submit", function(event) {
     event.preventDefault(); 
 
     const playerName = playerNameInput.value.trim().toUpperCase(); 
-    const playerScore = maxScore;
+    const playerScore = score.toFixed(0);
 
     if (playerName.length > 1 && playerName.length < 10) { 
         scores.push({ name: playerName, score: playerScore }); 
         scores.sort((a, b) => b.score - a.score); 
+        
+        localStorage.setItem("scores", JSON.stringify(scores));
+        
         updateLeaderboard(); 
         playerNameInput.value = ""; 
         hideScoreDiv();
@@ -132,7 +141,6 @@ scoreForm.addEventListener("submit", function(event) {
     } else {
         alert("El nombre debe tener de 1 a 10 letras.");
     }
-    
 });
 
 function updateLeaderboard() {
@@ -147,6 +155,7 @@ function updateLeaderboard() {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
+hideLeaderboard();
+hideScoreDiv();
 startLoop();
-
 

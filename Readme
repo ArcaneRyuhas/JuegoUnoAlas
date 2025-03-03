@@ -1,0 +1,5 @@
+*Instrucciones*
+
+1.- Agregar o eliminar imagenes de selección.
+Para agregar o eliminar imagenes se puede modificar el archivo de data.js agregando o quitando elementos a la constante images agregando el nombre que aparecera en el juego y la dirección del .png
+Las imagenes se almacenan en la carpeta images/gameImages en esta carpeta se deben agregar los SRC de los png para las nuevas imagenes.

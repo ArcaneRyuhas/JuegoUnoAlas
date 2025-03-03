@@ -12,7 +12,7 @@ var lastScore = 0;
 export var score = 0;
 export var maxScore = 0;
 var correctAnswers = 3;
-var level = 1;
+var level = 5;
 var timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
 
@@ -69,7 +69,7 @@ function substractScore() {
 
 function hasWin() {
     if (correctAnswers == totalAnswers) {
-        if (level === 5) {
+        if (level == 5) {
             showScoreDiv();
         }
         else {
@@ -132,7 +132,7 @@ export function restart() {
 }
 
 export function nextLevel() {
-    if (level < 4) {
+    if (level < 5) {
         level++;
     }
     startNextLevel();
