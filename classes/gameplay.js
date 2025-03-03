@@ -4,7 +4,7 @@ import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu, showS
 
 const CORRECT_ANSWER_SCORE = 100;
 const EXTRA_SCORE_PER_LEVEL = 25;
-const WRONG_ANSWER_SCORE = -50;
+const WRONG_ANSWER_SCORE = -100;
 
 
 export var gameEnded = false;
@@ -12,7 +12,7 @@ var lastScore = 0;
 export var score = 0;
 export var maxScore = 0;
 var correctAnswers = 3;
-var level = 5;
+var level = 1;
 var timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
 
