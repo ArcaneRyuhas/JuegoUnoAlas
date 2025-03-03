@@ -1,14 +1,16 @@
 import { Player } from './classes/player.js';
 import { drawRoadLines, updateRoadLinesPosition } from './classes/objects.js';
-import { drawBackground, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
+import { drawBackground, drawSplashScreen, drawStartBackground, startBackgroundIsDisplayed } from './classes/background.js';
 import { resizeCanvas, canvas, ctx } from './classes/canvas.js';
 import { drawImagesAndName, selectImages  } from './classes/obstacles.js';
 import { drawImage, drawScore, gameEnded, nextLevel, restart, drawTimer, startTimer, restartGame } from './classes/gameplay.js';
 import { movePlayer } from './classes/listener/canvaMethods.js';
 import { hideYouLostMenu, hideYouWinMenu } from './classes/overlay.js';
+import { score } from './classes/gameplay.js';
+import { showLeaderboard, hideScoreDiv, hideLeaderboard} from './classes/overlay.js';
 
 const player = new Player();
-var isGameRunning = true;
+export var isGameRunning = true;
 let keyPressed={}
 
 function gameLoop() {
@@ -43,6 +45,7 @@ function updateElements(){
 
 function startGame(){
     isGameRunning = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     selectImages();
     gameLoop();
     startTimer();
@@ -67,12 +70,20 @@ restartButton.addEventListener('click', function(){
     hideYouWinMenu();
     hideYouLostMenu();
     restartGame();
+    startGame();
 });
 
 restartButtonTwo.addEventListener('click', function(){
     hideYouWinMenu();
     hideYouLostMenu();
     restartGame();
+    startGame();
+})
+
+restartButtonThree.addEventListener('click', function(){
+    hideLeaderboard();
+    restartGame();
+    startGame();
 })
 
 window.addEventListener('keydown', (e) => {
@@ -83,19 +94,68 @@ window.addEventListener('keyup', (e) => {
     keyPressed[e.key] = false;
 });
 
+let click = false;
+
 canvas.addEventListener('click', () => {
-    if(startBackgroundIsDisplayed){
-        startGame();
+    if(startBackgroundIsDisplayed && !click){
+        click = true;
+        drawSplashScreen();
+        setTimeout(startGame, 5000);
     }
 })
 
 function startLoop(){
     drawStartBackground();
-    requestAnimationFrame(startLoop); 
+    if(isGameRunning){
+        requestAnimationFrame(startLoop); 
+    }
+}
+
+const storedScores = localStorage.getItem("scores");
+const scores = storedScores ? JSON.parse(storedScores) : [];
+
+const scoreForm = document.getElementById("scoreForm");
+const playerNameInput = document.getElementById("playerName");
+const leaderboardList = document.getElementById("leaderboardList");
+
+
+updateLeaderboard();
+
+scoreForm.addEventListener("submit", function(event) {
+    event.preventDefault(); 
+
+    const playerName = playerNameInput.value.trim().toUpperCase(); 
+    const playerScore = score.toFixed(0);
+
+    if (playerName.length > 1 && playerName.length < 10) { 
+        scores.push({ name: playerName, score: playerScore }); 
+        scores.sort((a, b) => b.score - a.score); 
+        
+        localStorage.setItem("scores", JSON.stringify(scores));
+        
+        updateLeaderboard(); 
+        playerNameInput.value = ""; 
+        hideScoreDiv();
+        showLeaderboard();
+        console.log(scores);
+    } else {
+        alert("El nombre debe tener de 1 a 10 letras.");
+    }
+});
+
+function updateLeaderboard() {
+    leaderboardList.innerHTML = ""; 
+
+    scores.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = `${entry.name} - ${entry.score} pts`;
+        leaderboardList.appendChild(li);
+    });
 }
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
+hideLeaderboard();
+hideScoreDiv();
 startLoop();
-
 

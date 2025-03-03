@@ -8,7 +8,16 @@ export const images = [
     { name: "regadera", src:'../images/gameImages/Regadera.png' },
     { name: "lavabo", src: '../images/gameImages/Lavabo.png'},
     { name: "jirafa", src: '../images/gameImages/Jirafa.png'},
-    { name: "carne", src: '../images/gameImages/Carne.png'}
+    { name: "carne", src: '../images/gameImages/Carne.png'},
+    { name: "muñeca", src: '../images/gameImages/Muñeca.png'},
+    { name: "dado", src: '../images/gameImages/Dado.png'},
+    { name: "yoyo", src: '../images/gameImages/Yoyo.png'},
+    { name: "futbol", src: '../images/gameImages/Futbol.png'},
+    { name: "billar", src: '../images/gameImages/Billar.png'},
+    { name: "basquetbol", src: '../images/gameImages/Basquetbol.png'},
+    { name: "carpeta", src: '../images/gameImages/Carpeta.png'},
+    { name: "marcador", src: '../images/gameImages/Marcador.png'},
+    { name: "folder", src: '../images/gameImages/Folder.png'},
 ]
 
 export const levelConfiguration = [

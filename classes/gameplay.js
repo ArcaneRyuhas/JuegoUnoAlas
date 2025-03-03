@@ -1,16 +1,18 @@
 import { canvas, ctx } from './canvas.js';
 import { imagesPerLevel, levelConfiguration } from '../data.js';
-import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu } from './overlay.js';
+import { showYouLostMenu, showYouWinMenu, hideYouLostMenu, hideYouWinMenu, showScoreDiv } from './overlay.js';
 
 const CORRECT_ANSWER_SCORE = 100;
 const EXTRA_SCORE_PER_LEVEL = 25;
 const WRONG_ANSWER_SCORE = -50;
 
+
 export var gameEnded = false;
+var lastScore = 0;
 export var score = 0;
 export var maxScore = 0;
 var correctAnswers = 3;
-var level = 1;
+var level = 5;
 var timeRemaining = levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
 var totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
 
@@ -24,10 +26,10 @@ export function choseOption(playerPosition, correctImagePosition) {
     if (correctImagePosition == correctPlayerPosition) {
         correctAnswers++;
         addScore();
-        canvas.style.boxShadow = "0 0 10px 5px green";
+        animateShadow('green');
         hasWin();
     } else {
-        canvas.style.boxShadow = "0 0 10px 5px red";
+        animateShadow('red');
         correctAnswers--;
         substractScore();
         hasLost();
@@ -36,21 +38,43 @@ export function choseOption(playerPosition, correctImagePosition) {
     if (!gameEnded) {
         startTimer();
     }
+
+    showScoreEffect(lastScore);
+}
+
+function animateShadow(color) {
+    let intensity = 255;
+    let step = -10;
+    let interval = setInterval(() => {
+        intensity += step;
+        if (intensity <= 100) {
+            clearInterval(interval);
+            intensity = 100;
+        }
+        canvas.style.boxShadow = `0 0 10px 5px rgb(${color === "red" ? intensity : 0}, ${color === "green" ? intensity : 0}, 0)`;
+    }, 100);
 }
 
 function addScore() {
     let extraScore = (level - 1) * EXTRA_SCORE_PER_LEVEL;
     let scoreToAdd = (CORRECT_ANSWER_SCORE * (timeRemaining / levelConfiguration.find(item => item.levelNumber === level).levelSpeed)) + extraScore;
     score += scoreToAdd;
+    lastScore = scoreToAdd;
 }
 
 function substractScore() {
     score += WRONG_ANSWER_SCORE;
+    lastScore = WRONG_ANSWER_SCORE;
 }
 
 function hasWin() {
     if (correctAnswers == totalAnswers) {
-        showYouWinMenu();
+        if (level == 5) {
+            showScoreDiv();
+        }
+        else {
+            showYouWinMenu();
+        }
         gameEnded = true;
         showConfetti();
     }
@@ -70,7 +94,6 @@ function showConfetti() {
 
         var particleCount = 50 * (timeLeft / duration);
 
-        // since particles fall down, start a bit higher than random
         confetti(
             Object.assign({}, defaults, {
                 particleCount,
@@ -109,7 +132,7 @@ export function restart() {
 }
 
 export function nextLevel() {
-    if (level < 4) {
+    if (level < 5) {
         level++;
     }
     startNextLevel();
@@ -119,7 +142,7 @@ function startNextLevel() {
     gameEnded = false;
     correctAnswers = 3;
     totalAnswers = levelConfiguration.find(item => item.levelNumber === level).totalAnswers;
-    image.src= imagesPerLevel.find(item => item.levelNumber === level).src;
+    image.src = imagesPerLevel.find(item => item.levelNumber === level).src;
 
     hideYouLostMenu();
     hideYouWinMenu();
@@ -146,8 +169,35 @@ export function startTimer() {
     }, 1000);
 }
 
-//FALTA ACOMODAR BIEN EL ROUNDED_RECTANGLE 
+
+function showScoreEffect(points) {
+    const scoreEffect = document.getElementById("scoreEffect");
+    const scoreText = document.getElementById("score");
+
+    scoreEffect.style.animation = "none";
+
+    if (points < 0) {
+        scoreText.textContent = `${points.toFixed(0)}`;
+        scoreEffect.style.color = "red";
+    }
+    else {
+        scoreText.textContent = `+${points.toFixed(0)}`;
+        scoreEffect.style.color = "green";
+    }
+
+    void scoreEffect.offsetWidth;
+    scoreEffect.style.animation = "scoreFade 2s ease-out forwards";
+
+    scoreEffect.style.opacity = "1"; 
+}
+
+
+
 export function drawScore() {
+    drawNormalScore();
+}
+
+function drawNormalScore() {
     let xRelativePosition = 0.8955 * canvas.width;
     let yRelativePosition = 0.7 * canvas.height;
 
@@ -202,7 +252,13 @@ function drawTimeRemaining(x, y) {
     let fontSize = canvas.width * 0.03;
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px Arial`;
-    ctx.fillStyle = 'black';
+
+    if (timeRemaining > 5) {
+        ctx.fillStyle = 'black';
+    }
+    else {
+        ctx.fillStyle = 'red';
+    }
 
     ctx.fillText(timeRemaining, x + 1, y + 18);
 }
@@ -210,7 +266,14 @@ function drawTimeRemaining(x, y) {
 function drawCircle(x, y, radius, alpha) {
 
     ctx.fillStyle = `rgba(217, 217, 217, ${alpha})`;
-    ctx.strokeStyle = "black"
+
+    if (timeRemaining > 5) {
+        ctx.strokeStyle = "black";
+    }
+    else {
+        ctx.strokeStyle = 'red';
+    }
+
     ctx.lineWidth = 4;
 
     ctx.beginPath();
@@ -228,7 +291,14 @@ function drawCircle(x, y, radius, alpha) {
 function drawOuterCircle(x, y, radius) {
 
     ctx.fillStyle = `black`;
-    ctx.strokeStyle = "black"
+
+    if (timeRemaining > 5) {
+        ctx.strokeStyle = "black";
+    }
+    else {
+        ctx.strokeStyle = 'red';
+    }
+
     ctx.lineWidth = 4;
 
     let value = timeRemaining / levelConfiguration.find(item => item.levelNumber === level).levelSpeed;
@@ -289,11 +359,11 @@ export function drawImage() {
 
 }
 
-export function restartGame(){
+export function restartGame() {
     level = 1;
     score = 0;
     maxScore = 0;
-    image.src= imagesPerLevel.find(item => item.levelNumber === level).src;
+    image.src = imagesPerLevel.find(item => item.levelNumber === level).src;
     restart();
 }
 

@@ -1,6 +1,18 @@
 import { canvas, ctx } from './canvas.js';
 import { images } from '../data.js';
 
+let preloadedImages = [];
+
+function preloadImages() {
+    preloadedImages = images.map(item => {
+        const img = new Image();
+        img.src = item.src;
+        return { image: img, name: item.name };
+    });
+}
+
+preloadImages();
+
 var imagesArray = [];
 var correctImage;
 export var correctImagePosition;
@@ -14,13 +26,28 @@ const imagePositions = [
     { x: 0.54, y: 0.15 }
 ];
 
-function getRandomImageName() {
+function getRandomPreloadedImage() {
     let index;
     do {
-        index = Math.floor(Math.random() * images.length);
+        index = Math.floor(Math.random() * preloadedImages.length);
     } while (selectedImages.has(index));
     selectedImages.add(index);
-    return images[index];
+    return preloadedImages[index];
+}
+
+export function selectImages() {
+    selectedImages.clear();
+    imagesArray = [];
+    correctImagePosition = Math.floor(Math.random() * 3);
+
+    for (let i = 0; i < 3; i++) {
+        const randomPreloaded = getRandomPreloadedImage();
+        imagesArray.push(randomPreloaded.image);
+
+        if (i === correctImagePosition) {
+            correctImage = randomPreloaded.name;
+        }
+    }
 }
 
 export function drawImagesAndName() {
@@ -36,9 +63,9 @@ function drawImages() {
         let yRelativePosition = imagePositions[index].y * canvas.height;
         let relativeSize = canvas.width * IMAGE_SIZE;
 
-        ctx.strokeStyle = 'black';  
-        ctx.lineWidth = 5;          
-        ctx.strokeRect(xRelativePosition - 2, yRelativePosition - 2, relativeSize + 4, relativeSize + 4);  // Contorno alrededor de la imagen
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(xRelativePosition - 2, yRelativePosition - 2, relativeSize + 4, relativeSize + 4);
 
         ctx.drawImage(image, xRelativePosition, yRelativePosition, relativeSize, relativeSize);
 
@@ -52,7 +79,7 @@ function drawImageName() {
 
     drawRoundedRect(0.325 * canvas.width, 0.02 * canvas.height);
 
-    let fontSize = canvas.width * 0.03; 
+    let fontSize = canvas.width * 0.03;
     ctx.textAlign = 'center';
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
@@ -60,48 +87,25 @@ function drawImageName() {
 }
 
 function drawRoundedRect(xRelativePosition, yRelativePosition) {
-    const width = canvas.width / 4;  // Ancho del rectángulo relativo al tamaño del canvas
-    const height = canvas.height / 9; // Alto del rectángulo relativo al tamaño del canvas
-    const borderRadius = 20;  // Radio de las esquinas redondeadas
+    const width = canvas.width / 4;
+    const height = canvas.height / 9;
+    const borderRadius = 20;
 
-    // Comenzar el trazo
     ctx.beginPath();
+    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition);
+    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition);
+    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius);
+    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius);
+    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius);
+    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height);
+    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius);
+    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius);
+    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius);
 
-    // Dibujar las esquinas redondeadas usando arcos (ctx.arc)
-    ctx.moveTo(xRelativePosition + borderRadius, yRelativePosition); // Mover a la esquina superior izquierda
-    ctx.lineTo(xRelativePosition + width - borderRadius, yRelativePosition); // Línea recta al borde superior derecho
-    ctx.arcTo(xRelativePosition + width, yRelativePosition, xRelativePosition + width, yRelativePosition + borderRadius, borderRadius); // Arco esquina superior derecha
-    ctx.lineTo(xRelativePosition + width, yRelativePosition + height - borderRadius); // Línea recta hacia abajo (borde derecho)
-    ctx.arcTo(xRelativePosition + width, yRelativePosition + height, xRelativePosition + width - borderRadius, yRelativePosition + height, borderRadius); // Arco esquina inferior derecha
-    ctx.lineTo(xRelativePosition + borderRadius, yRelativePosition + height); // Línea recta hacia el borde inferior izquierdo
-    ctx.arcTo(xRelativePosition, yRelativePosition + height, xRelativePosition, yRelativePosition + height - borderRadius, borderRadius); // Arco esquina inferior izquierda
-    ctx.lineTo(xRelativePosition, yRelativePosition + borderRadius); // Línea recta hacia arriba (borde izquierdo)
-    ctx.arcTo(xRelativePosition, yRelativePosition, xRelativePosition + borderRadius, yRelativePosition, borderRadius); // Arco esquina superior izquierda
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
 
-    // Establecer propiedades del contorno y del relleno
-    ctx.lineWidth = 5; // Grosor del contorno
-    ctx.strokeStyle = 'black'; // Color del contorno
-    ctx.stroke(); // Dibuja el contorno
-
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; // Color del relleno con transparencia (alfa)
-    ctx.fill(); // Rellenar el recuadro
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.fill();
 }
-
-
-export function selectImages() {
-    selectedImages.clear();
-    imagesArray = [];
-    correctImagePosition = Math.floor(Math.random() * 3);
-
-    for (let i = 0; i < 3; i++) {
-        let img = new Image();
-        let randomImage = getRandomImageName();
-        img.src = randomImage.src;
-        imagesArray.push(img);
-
-        if (i == correctImagePosition) {
-            correctImage = randomImage.name;
-        }
-    }
-}
-
